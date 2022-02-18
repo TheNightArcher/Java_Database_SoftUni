@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
+
         Scanner scanner = new Scanner(System.in);
 
         Properties props = new Properties();
@@ -38,5 +39,7 @@ public class Main {
         } else {
             System.out.println("No such user exists");
         }
+
+        connection.close();
     }
 }
