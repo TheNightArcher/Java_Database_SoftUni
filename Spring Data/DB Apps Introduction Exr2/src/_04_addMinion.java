@@ -99,5 +99,7 @@ public class _04_addMinion {
 
         System.out.printf("Successfully added %s to be minion of %s.",minionName,villainName);
 
+        connection.close();
+
     }
 }

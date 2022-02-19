@@ -48,5 +48,7 @@ public class _05_namesCasing {
         }
 
         System.out.println(towns);
+
+        connection.close();
     }
 }
