@@ -41,5 +41,7 @@ public class _08_increaseMinionAge {
 
             System.out.printf("%s %d\n",names,age);
         }
+
+        connection.close();
     }
 }
