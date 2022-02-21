@@ -12,17 +12,16 @@ import static orm.MyConnector.getConnection;
 public class Main {
     public static void main(String[] args) throws SQLException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
 
-        createConnection("root", "", "custom-orm");
+        createConnection("root", "123", "custom-orm");
         Connection connection = getConnection();
 
         EntityManager<User> userEntityManager = new EntityManager<>(connection);
 
 
-        User user = new User("pesho", 25, LocalDate.now());
-        user.setUsername("pesho_new_finalv2");
+        User user = new User("Pesho", 25, LocalDate.now());
+        user.setUsername("pesho2");
 
-//        userEntityManager.doCreate(User.class);
-//        userEntityManager.doAlter(User.class);
+
         userEntityManager.persist(user);
 
         Iterable<User> first = userEntityManager.find(User.class);
