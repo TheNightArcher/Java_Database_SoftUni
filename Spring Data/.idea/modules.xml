@@ -4,8 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Custom ORM/Custom ORM.iml" filepath="$PROJECT_DIR$/Custom ORM/Custom ORM.iml" />
       <module fileurl="file://$PROJECT_DIR$/DB Apps Introduction/DB Apps Introduction.iml" filepath="$PROJECT_DIR$/DB Apps Introduction/DB Apps Introduction.iml" />
-      <module fileurl="file://$PROJECT_DIR$/DB Apps Introduction/DB Apps Introduction Exr2/DB Apps Introduction Exr2.iml" filepath="$PROJECT_DIR$/DB Apps Introduction/DB Apps Introduction Exr2/DB Apps Introduction Exr2.iml" />
       <module fileurl="file://$PROJECT_DIR$/Hibernate_JPA/Hibernate_JPA.iml" filepath="$PROJECT_DIR$/Hibernate_JPA/Hibernate_JPA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Intro to Hibernate Exr2/Intro to Hibernate Exr2.iml" filepath="$PROJECT_DIR$/Intro to Hibernate Exr2/Intro to Hibernate Exr2.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Spring Data.iml" filepath="$PROJECT_DIR$/.idea/Spring Data.iml" />
     </modules>
   </component>
