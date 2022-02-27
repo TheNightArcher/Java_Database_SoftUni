@@ -1,13 +1,11 @@
-import entities.Address;
-import entities.Employee;
-
+import entities.*;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Engine implements Runnable {
     private final EntityManager entityManager;
@@ -32,6 +30,12 @@ public class Engine implements Runnable {
                 case 5 -> employeesFromDepartment();
                 case 6 -> addingNewAddress();
                 case 7 -> addressesWithEmployeeCount();
+                case 8 -> getEmployeeWithProject();
+                case 9 -> findLatest_10_Projects();
+                case 10 -> increaseSalaries();
+                case 11 -> findEmployeesByFirstName();
+                case 12 -> employeesMaximumSalaries();
+                case 13 -> removeTowns();
             }
 
         } catch (IOException e) {
@@ -41,6 +45,130 @@ public class Engine implements Runnable {
         }
     }
 
+    private void removeTowns() throws IOException {
+        System.out.println("Please enter town");
+        String townName = bufferedReader.readLine();
+
+        Town town = entityManager.createQuery("SELECT t FROM Town t " +
+                        "WHERE t.name = :t_name ", Town.class)
+                .setParameter("t_name", townName)
+                .getSingleResult();
+
+        int deletedAddresses = removeAddressesByTownId(town.getId());
+
+        System.out.printf("%d address in %s deleted", deletedAddresses, townName);
+    }
+
+    private int removeAddressesByTownId(Integer id) {
+
+        List<Address> addresses = entityManager.createQuery("SELECT a FROM Address a " +
+                        "WHERE a.town.id = :t_id", Address.class)
+                .setParameter("t_id", id)
+                .getResultList();
+
+        entityManager.getTransaction().begin();
+        addresses.forEach(entityManager::remove);
+        entityManager.getTransaction().commit();
+
+        return addresses.size();
+    }
+
+    private void employeesMaximumSalaries() {
+        List<Object[]> rows = entityManager.createNativeQuery("SELECT d.name,MAX(e.salary) as `m_salary` FROM departments d\n" +
+                "join employees e on d.department_id = e.department_id\n" +
+                "Group by d.name\n" +
+                "Having `m_salary` not between 30000 and 70000;").getResultList();
+
+        for (var row : rows) {
+            System.out.println( Arrays.toString(row));
+        }
+    }
+
+    private void findEmployeesByFirstName() throws IOException {
+        System.out.println("Please enter name start like...");
+        String letters = bufferedReader.readLine();
+
+        entityManager.createQuery("SELECT e FROM Employee e " +
+                        "WHERE e.firstName LIKE CONCAT(:l_start,'%') ", Employee.class)
+                .setParameter("l_start", letters)
+                .getResultStream()
+                .forEach(e -> System.out.printf("%s %s - %s - ($%.2f)\n",
+                        e.getFirstName(),
+                        e.getLastName(),
+                        e.getJobTitle(),
+                        e.getSalary()));
+    }
+
+    private void increaseSalaries() {
+        // First I do update because if we try to print result at the same time will get
+        // typeQuery can't be "Update or Delete" that's why I split it at two parts.
+
+        entityManager.getTransaction().begin();
+
+        entityManager.createQuery("UPDATE Employee " +
+                        "SET salary = salary + (salary * 0.12) " +
+                        "WHERE department.id IN (1,2,4,11) ")
+                .executeUpdate();
+
+
+        entityManager.getTransaction().commit();
+
+        entityManager.createQuery("SELECT e FROM Employee e " +
+                        "WHERE e.department.id IN (1,2,4,11)", Employee.class)
+                .getResultStream()
+                .forEach(e -> System.out.printf("%s %s ($%.2f)\n",
+                        e.getFirstName(),
+                        e.getLastName(),
+                        e.getSalary()));
+    }
+
+    private void findLatest_10_Projects() {
+        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        List<Project> projects = entityManager.createQuery("SELECT p FROM Project p " +
+                        "ORDER BY p.startDate DESC ", Project.class)
+                .setMaxResults(10)
+                .getResultList();
+
+        Stream<String> sortedByName = projects
+                .stream()
+                .map(Project::getName)
+                .sorted();
+
+        // First I sorted all the projects then I started to take them out in sort order from the nested loop.
+        for (Object orderedName : sortedByName.collect(Collectors.toList())) {
+            for (Project p : projects) {
+
+                if (p.getName().equals(orderedName)) {
+                    System.out.printf("Project name: %s\n", p.getName());
+                    System.out.printf("Project Description: %s\n", p.getDescription());
+                    System.out.printf("Project Start Date: %s\n", p.getStartDate() == null
+                            ? "null" : date.format(p.getStartDate()));
+                    System.out.printf("Project End Date: %s\n", p.getEndDate() == null
+                            ? "null" : date.format(p.getEndDate()));
+                    break;
+                }
+            }
+        }
+    }
+
+    private void getEmployeeWithProject() throws IOException {
+        System.out.println("Please enter id of employee");
+        Integer id = Integer.parseInt(bufferedReader.readLine());
+        Employee employee = entityManager.find(Employee.class, id);
+
+        System.out.printf("%S %s - %s\n",
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getJobTitle());
+
+        employee.getProjects()
+                .stream()
+                .map(Project::getName)
+                .sorted()
+                .forEach(System.out::println);
+    }
+
     private void addressesWithEmployeeCount() {
         List<Address> result = entityManager
                 .createQuery("SELECT a FROM Address a " +
@@ -48,10 +176,10 @@ public class Engine implements Runnable {
                 .setMaxResults(10)
                 .getResultList();
 
-        result.forEach(a -> System.out.printf("%s, %s - %d employees %n",
+        result.forEach(a -> System.out.printf("%s, %s - %d employees \n",
                 a.getText(),
                 a.getTown() == null
-                ? "Unknown" : a.getTown().getName(),
+                        ? "Unknown" : a.getTown().getName(),
                 a.getEmployees().size()));
     }
 
@@ -87,7 +215,7 @@ public class Engine implements Runnable {
                         "WHERE e.department.id = 6 " +
                         "ORDER BY e.salary,e.id ", Employee.class)
                 .getResultList()
-                .forEach(e -> System.out.printf("%s %s from %s - $%.2f%n",
+                .forEach(e -> System.out.printf("%s %s from %s - $%.2f\n",
                         e.getFirstName(),
                         e.getLastName(),
                         e.getDepartment().getName(),
@@ -133,4 +261,7 @@ public class Engine implements Runnable {
 
         entityManager.getTransaction().commit();
     }
+
+    // Here I will post my GitHub if you like to see how I solve my exercises.
+    // link -->  https://github.com/TheNightArcher
 }
