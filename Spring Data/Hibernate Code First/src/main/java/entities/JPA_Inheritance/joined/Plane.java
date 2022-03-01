@@ -1,12 +1,11 @@
-package entities.joined;
+package entities.JPA_Inheritance.joined;
 
 import javax.persistence.Entity;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 
+
 @Entity
-@MappedSuperclass
 @Table(name = "planes")
 public class Plane extends Vehicle {
     private Integer passengerCapacity;

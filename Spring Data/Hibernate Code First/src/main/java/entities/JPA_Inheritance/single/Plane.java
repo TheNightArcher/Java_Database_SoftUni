@@ -1,12 +1,13 @@
-package entities.per_class;
+package entities.JPA_Inheritance.single;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 
+
 @Entity
-@Table(name = "planes")
-public class Plane extends Vehicle{
+@DiscriminatorValue(value = "plane")
+public class Plane extends Vehicle {
     private Integer passengerCapacity;
 
     public Plane(){}

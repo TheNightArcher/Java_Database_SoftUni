@@ -1,4 +1,4 @@
-package entities.joined;
+package entities.JPA_Inheritance.joined;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

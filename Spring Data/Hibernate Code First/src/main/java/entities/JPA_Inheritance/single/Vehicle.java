@@ -1,11 +1,12 @@
-package entities.per_class;
+package entities.JPA_Inheritance.single;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "vehicles")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
 public abstract class Vehicle {
 
     @Id
@@ -13,6 +14,7 @@ public abstract class Vehicle {
     private Long id;
 
     @Basic
+    @Column(insertable = false,updatable = false)
     private String type;
     private String model;
     private BigDecimal price;

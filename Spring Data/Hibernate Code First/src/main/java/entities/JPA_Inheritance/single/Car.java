@@ -1,12 +1,13 @@
-package entities.per_class;
+package entities.JPA_Inheritance.single;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 
+
 @Entity
-@Table(name = "cars")
-public class Car extends Vehicle{
+@DiscriminatorValue(value = "car")
+public class Car extends Vehicle {
     private Integer seats;
 
     public Car(){}

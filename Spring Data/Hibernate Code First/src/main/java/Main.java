@@ -1,6 +1,5 @@
-import entities.per_class.Car;
-import entities.per_class.Vehicle;
-
+import entities.JPA_Inheritance.single.Car;
+import entities.JPA_Inheritance.single.Vehicle;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
