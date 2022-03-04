@@ -18,4 +18,26 @@ public class BillingDetails {
     @ManyToOne
     private BankUser owner;
 
+    public BillingDetails(){}
+
+    public BillingDetails(Long number, BankUser owner) {
+        this.number = number;
+        this.owner = owner;
+    }
+
+    public Long getNumber() {
+        return number;
+    }
+
+    public void setNumber(Long number) {
+        this.number = number;
+    }
+
+    public BankUser getOwner() {
+        return owner;
+    }
+
+    public void setOwner(BankUser owner) {
+        this.owner = owner;
+    }
 }
