@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -22,22 +22,25 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void withdrawnMoney(BigDecimal money, Long id) {
 
+        Account account = this.accountRepository
+                .findById(id)
+                .orElseThrow();
 
+        if (account.getBalance().compareTo(money) < 0) {
+            System.out.println("Lack of balance");
+        }
+
+        account.setBalance(account.getBalance().subtract(money));
+        this.accountRepository.save(account);
     }
 
     @Override
     public void transferMoney(BigDecimal money, Long id) {
         User user = accountRepository.findAccountById(id).getUser();
 
-        if (user != null) {
-            if (money.compareTo(BigDecimal.ZERO) >= 0) {
-                BigDecimal currentBalance = accountRepository.findAccountById(id)
-                        .getBalance()
-                        .add(money);
-                accountRepository.findAccountById(id).setBalance(currentBalance);
-            }
-        } else {
-            System.out.println("Account id dose not exist!");
-        }
+        Account account = this.accountRepository.findById(id).orElseThrow();
+
+        account.setBalance(account.getBalance().add(money));
+        this.accountRepository.save(account);
     }
 }

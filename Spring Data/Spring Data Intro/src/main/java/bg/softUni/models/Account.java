@@ -8,8 +8,7 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private long id;
+    private Long id;
 
     private BigDecimal balance;
 
@@ -22,11 +21,11 @@ public class Account {
         this.balance = balance;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
