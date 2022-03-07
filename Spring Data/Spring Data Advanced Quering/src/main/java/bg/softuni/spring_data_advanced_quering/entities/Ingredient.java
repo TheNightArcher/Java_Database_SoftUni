@@ -1,4 +1,7 @@
-package com.example.advquerying.entities;
+package bg.softuni.spring_data_advanced_quering.entities;
+
+import bg.softuni.spring_data_advanced_quering.entities.BaseEntity;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;

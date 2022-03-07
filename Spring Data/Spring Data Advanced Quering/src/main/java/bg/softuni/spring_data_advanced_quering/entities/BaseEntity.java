@@ -1,4 +1,4 @@
-package com.example.advquerying.entities;
+package bg.softuni.spring_data_advanced_quering.entities;
 
 import javax.persistence.*;
 
