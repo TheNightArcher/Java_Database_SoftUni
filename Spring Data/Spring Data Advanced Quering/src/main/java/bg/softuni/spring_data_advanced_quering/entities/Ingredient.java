@@ -37,7 +37,7 @@ public class Ingredient extends BaseEntity {
 
     @ManyToMany(mappedBy = "ingredients",
             fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.REMOVE)
     public Set<Shampoo> getShampoos() {
         return this.shampoos;
     }

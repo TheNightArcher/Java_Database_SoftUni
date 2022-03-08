@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 
 @Component
@@ -36,6 +37,16 @@ public class Run implements CommandLineRunner {
 //        this.ingredientService.selectAllByNameOrderByPrice(List.of("Lavender","Herbs","Apple"))
 //                .forEach(i -> System.out.println(i.getName()));
 
-        System.out.println(this.shampoosService.countAllShampoosLessThen(BigDecimal.valueOf(8.50)));
+//       System.out.println(this.shampoosService.countAllShampoosLessThen(BigDecimal.valueOf(8.50)));
+
+//        this.shampoosService.selectAllByGivenIngredients(Set.of("Berry","Mineral-Collagen"))
+//                .forEach(s -> System.out.printf("%s\n",s.getBrand()));
+
+//        this.shampoosService.getAllLessThenGivenCount(2)
+//                .forEach(s -> System.out.printf("%s\n",s.getBrand()));
+
+     //   this.ingredientService.deleteSelectedName("Nettle");
+
+        this.ingredientService.updatePriceByGivenNames(Set.of("Apple","Nettle","Aloe Vera"));
     }
 }

@@ -1,5 +1,6 @@
 package bg.softuni.spring_data_advanced_quering.services;
 
+import bg.softuni.spring_data_advanced_quering.entities.Ingredient;
 import bg.softuni.spring_data_advanced_quering.entities.Shampoo;
 import bg.softuni.spring_data_advanced_quering.entities.Size;
 import bg.softuni.spring_data_advanced_quering.repositories.ShampoosRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ShampoosServiceImpl implements ShampoosService {
@@ -35,5 +37,15 @@ public class ShampoosServiceImpl implements ShampoosService {
     @Override
     public int countAllShampoosLessThen(BigDecimal price) {
         return this.shampoosRepository.countByPriceLessThan(price);
+    }
+
+    @Override
+    public List<Shampoo> selectAllByGivenIngredients(Set<String> names) {
+        return this.shampoosRepository.findByIngredientsName(names);
+    }
+
+    @Override
+    public List<Shampoo> getAllLessThenGivenCount(int count) {
+        return this.shampoosRepository.findByCountOfIngredients(count);
     }
 }
