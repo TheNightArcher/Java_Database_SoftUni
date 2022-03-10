@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
@@ -69,7 +70,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<String> findAllBooksByAuthorFirstAndLastNameOrderByReleaseDate(String firstName, String lastName) {
-       return bookRepository
+        return bookRepository
                 .findAllByAuthor_FirstNameAndAuthor_LastNameOrderByReleaseDateDescTitle(firstName, lastName)
                 .stream()
                 .map(book -> String.format("%s %s %d",
@@ -77,6 +78,87 @@ public class BookServiceImpl implements BookService {
                         book.getReleaseDate(),
                         book.getCopies()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void findAllBooksByAgeRestriction(AgeRestriction type) {
+
+        this.bookRepository.findByAgeRestriction(type)
+                .stream().
+                map(Book::getTitle)
+                .forEach(System.out::println);
+    }
+
+    @Override
+    public void findAllBooksByEditionTypeAndLessThenGivenCopies(EditionType type, int copies) {
+        this.bookRepository.findByEditionTypeAndCopiesLessThan(type, copies)
+                .stream().map(Book::getTitle)
+                .forEach(System.out::println);
+    }
+
+    @Override
+    public void findAllBooksPriceBiggerOrLowerThenGiven(BigDecimal lower, BigDecimal higher) {
+        this.bookRepository.findByPriceLessThanOrPriceGreaterThan(lower, higher)
+                .forEach(b -> System.out.printf("%s - $%.2f\n",
+                        b.getTitle(),
+                        b.getPrice()));
+    }
+
+    @Override
+    public void findAllBooksNotInGivenYear(int year) {
+
+        LocalDate before = LocalDate.of(year, 1, 1);
+        LocalDate after = LocalDate.of(year, 12, 31);
+
+        this.bookRepository.findByReleaseDateBeforeOrReleaseDateAfter(before, after)
+                .stream()
+                .map(Book::getTitle)
+                .forEach(System.out::println);
+    }
+
+    @Override
+    public void findAllBooksBeforeGivenDate(String date) {
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate givenDate = LocalDate.parse(date, dateTimeFormatter);
+
+        this.bookRepository.findByReleaseDateBefore(givenDate)
+                .forEach(b -> System.out.printf("%s %s %.2f\n",
+                        b.getTitle(),
+                        b.getEditionType(),
+                        b.getPrice()));
+    }
+
+    @Override
+    public void findAllTitlesContainsGivenLetters(String letters) {
+        this.bookRepository.findByTitleContaining(letters)
+                .stream()
+                .map(Book::getTitle)
+                .forEach(System.out::println);
+    }
+
+    @Override
+    public void findAllAuthorsWithLastNameLike(String letters) {
+        this.bookRepository.findByAuthorLastNameStartingWith(letters)
+                .forEach(b -> System.out.printf("%s (%s %s)\n",
+                        b.getTitle(),
+                        b.getAuthor().getFirstName(),
+                        b.getAuthor().getLastName()));
+    }
+
+    @Override
+    public int findAllTitlesBiggerThenGivenLength(int length) {
+        return this.bookRepository.findByTitleGreaterThanGivenLength(length);
+    }
+
+    @Override
+    public void findGivenTitle(String title) {
+        this.bookRepository.findInformationAboutGivenBook(title)
+                .forEach(b -> System.out.printf("%s %S %S %.2f\n",
+                        b.getTitle(),
+                        b.getEditionType(),
+                        b.getAgeRestriction(),
+                        b.getPrice()));
     }
 
     private Book createBookFromInfo(String[] bookInfo) {
@@ -96,6 +178,7 @@ public class BookServiceImpl implements BookService {
                 .getRandomCategories();
 
         return new Book(editionType, releaseDate, copies, price, ageRestriction, title, author, categories);
-
     }
+
+
 }

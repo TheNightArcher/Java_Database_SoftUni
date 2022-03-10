@@ -1,6 +1,8 @@
 package com.example.springintro.repository;
 
 import com.example.springintro.model.entity.Author;
+import com.example.springintro.model.entity.AuthorWithGivenCopies;
+import com.example.springintro.model.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,4 +14,13 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     @Query("SELECT a FROM Author a ORDER BY a.books.size DESC")
     List<Author> findAllByBooksSizeDESC();
+
+    List<Author> findByFirstNameEndingWith(String letters);
+
+    @Query("SELECT a.firstName AS firstName, a.lastName AS lastName, SUM(b.copies) AS copies " +
+            "FROM Author AS a " +
+            "JOIN a.books AS b " +
+            "GROUP BY b.author " +
+            "ORDER BY copies DESC ")
+    List<AuthorWithGivenCopies> findAuthorCopies();
 }

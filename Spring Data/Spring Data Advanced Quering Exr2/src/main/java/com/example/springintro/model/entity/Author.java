@@ -37,7 +37,7 @@ public class Author extends BaseEntity {
         this.lastName = lastName;
     }
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     public Set<Book> getBooks() {
         return books;
     }
