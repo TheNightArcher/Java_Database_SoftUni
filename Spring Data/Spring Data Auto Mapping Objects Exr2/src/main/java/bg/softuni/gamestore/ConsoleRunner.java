@@ -26,7 +26,6 @@ public class ConsoleRunner implements CommandLineRunner {
 
     }
 
-
     @Override
     public void run(String... args) throws Exception {
 
@@ -59,6 +58,8 @@ public class ConsoleRunner implements CommandLineRunner {
                                 commandParts[6],
                                 commandParts[7]
                         ));
+
+                /*case "EditGame" ->*/
 
                 // TODO: Edit and Delete
 
