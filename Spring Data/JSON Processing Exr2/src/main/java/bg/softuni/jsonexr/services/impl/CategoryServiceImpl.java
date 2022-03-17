@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -35,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void seedCategories() throws IOException {
 
-        if (categoryRepository.count() > 0){
+        if (categoryRepository.count() > 0) {
             return;
         }
 
@@ -43,11 +46,31 @@ public class CategoryServiceImpl implements CategoryService {
                 .readString(Path.of(GlobalConstants.RESOURCE_FILE_PATH + CATEGORIES_FILE_NAME));
 
         CategorySeedDto[] categorySeedDtos = gson
-                .fromJson(fileContent,CategorySeedDto[].class);
+                .fromJson(fileContent, CategorySeedDto[].class);
 
         Arrays.stream(categorySeedDtos)
                 .filter(validationUtil::isValid)
                 .map(CategorySeedDto -> modelMapper.map(CategorySeedDto, Category.class))
                 .forEach(categoryRepository::save);
+    }
+
+    @Override
+    public Set<Category> findRandomCategories() {
+
+        Set<Category> categorySet = new HashSet<>();
+
+        int catCount = ThreadLocalRandom.current().nextInt(1, 3);
+        long totalCategoriesCount = categoryRepository.count();
+
+        for (int i = 0; i < catCount; i++) {
+            long randomId = ThreadLocalRandom
+                    .current()
+                    .nextLong(1, totalCategoriesCount + 1);
+
+            categorySet
+                    .add(categoryRepository.findById(randomId).orElse(null));
+        }
+
+        return categorySet;
     }
 }

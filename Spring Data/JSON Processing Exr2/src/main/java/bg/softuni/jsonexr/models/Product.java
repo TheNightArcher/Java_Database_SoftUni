@@ -20,10 +20,10 @@ public class Product {
     private BigDecimal price;
 
     @ManyToOne
-    private User buyerId;
+    private User buyer;
 
     @ManyToOne
-    private User sellerId;
+    private User seller;
 
     @ManyToMany
     private Set<Category> categories;
@@ -32,12 +32,12 @@ public class Product {
         this.categories = new HashSet<>();
     }
 
-    public Product(String name, BigDecimal price, User buyerId, User sellerId, Set<Category> categories) {
+    public Product(String name, BigDecimal price, User buyer, User seller, Set<Category> categories) {
         this();
         this.name = name;
         this.price = price;
-        this.buyerId = buyerId;
-        this.sellerId = sellerId;
+        this.buyer = buyer;
+        this.seller = seller;
         this.categories = categories;
     }
 
@@ -61,20 +61,20 @@ public class Product {
         this.price = price;
     }
 
-    public User getBuyerId() {
-        return buyerId;
+    public User getBuyer() {
+        return buyer;
     }
 
-    public void setBuyerId(User buyerId) {
-        this.buyerId = buyerId;
+    public void setBuyer(User buyer) {
+        this.buyer = buyer;
     }
 
-    public User getSellerId() {
-        return sellerId;
+    public User getSeller() {
+        return seller;
     }
 
-    public void setSellerId(User sellerId) {
-        this.sellerId = sellerId;
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 
     public Set<Category> getCategories() {

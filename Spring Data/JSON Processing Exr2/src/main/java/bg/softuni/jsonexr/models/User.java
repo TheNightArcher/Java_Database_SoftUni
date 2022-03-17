@@ -22,6 +22,17 @@ public class User {
     @OneToMany
     private Set<User> friends;
 
+    @OneToMany(mappedBy = "seller",fetch = FetchType.EAGER)
+    private Set<Product> products;
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
     public User() {
         this.friends = new HashSet<>();
     }
