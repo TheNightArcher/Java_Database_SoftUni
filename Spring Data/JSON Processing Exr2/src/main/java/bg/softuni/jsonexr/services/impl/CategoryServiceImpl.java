@@ -2,6 +2,8 @@ package bg.softuni.jsonexr.services.impl;
 
 import bg.softuni.jsonexr.constants.GlobalConstants;
 import bg.softuni.jsonexr.models.Category;
+import bg.softuni.jsonexr.models.Product;
+import bg.softuni.jsonexr.models.dtos.CategoryProductsDto;
 import bg.softuni.jsonexr.models.dtos.CategorySeedDto;
 import bg.softuni.jsonexr.repositories.CategoryRepository;
 import bg.softuni.jsonexr.services.CategoryService;
@@ -11,12 +13,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -72,5 +77,32 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         return categorySet;
+    }
+
+    @Override
+    public List<CategoryProductsDto> findAllCategoriesWithProductCount() {
+        return categoryRepository.findAllCategoriesProductsCount()
+                .stream()
+                .map(category -> {
+                    CategoryProductsDto categoryProductsDto = modelMapper
+                            .map(category, CategoryProductsDto.class);
+
+                    categoryProductsDto.setCategory(category.getName()) ;
+
+                    categoryProductsDto.setProductsCount(category.getProducts().size());
+
+                    categoryProductsDto.setAveragePrice(BigDecimal.valueOf(20));
+
+                    BigDecimal sumOfProducts = BigDecimal.ZERO;
+                    for (Product product : category.getProducts()) {
+                        sumOfProducts = sumOfProducts.add(product.getPrice());
+                    }
+
+                    categoryProductsDto.setTotalRevenue(sumOfProducts);
+
+                    return categoryProductsDto;
+
+                })
+                .collect(Collectors.toList());
     }
 }

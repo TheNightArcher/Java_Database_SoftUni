@@ -1,5 +1,6 @@
 package bg.softuni.jsonexr;
 
+import bg.softuni.jsonexr.models.dtos.CategoryProductsDto;
 import bg.softuni.jsonexr.models.dtos.ProductNameAndPriceDto;
 import bg.softuni.jsonexr.models.dtos.UserSoldDto;
 import bg.softuni.jsonexr.services.CategoryService;
@@ -50,7 +51,15 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         switch (exNumber) {
             case 1 -> productsInRange();
             case 2 -> soldProducts();
+            case 3 -> categoriesByCount();
         }
+
+    }
+
+    private void categoriesByCount() {
+        List<CategoryProductsDto> categoryProductsDtos =
+                categoryService.findAllCategoriesWithProductCount();
+
 
     }
 

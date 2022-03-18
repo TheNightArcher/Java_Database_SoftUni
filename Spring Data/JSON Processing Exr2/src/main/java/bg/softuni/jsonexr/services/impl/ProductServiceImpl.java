@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductNameAndPriceDto> findAllProductsInRangeByPriceOrderByPrice(BigDecimal lower, BigDecimal upper) {
-        return productRepository.findAllByPriceBetweenAndBuyerIdIsNullOrderByPrice(lower, upper)
+        return productRepository.findAllByPriceBetweenAndBuyerIsNullOrderByPrice(lower, upper)
                 .stream()
                 .map(product -> {
                     ProductNameAndPriceDto productNameAndPriceDto = modelMapper
