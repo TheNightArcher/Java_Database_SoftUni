@@ -1,0 +1,68 @@
+[
+  {
+    "category": "Adult",
+    "productsCount": 37,
+    "averagePrice": 20,
+    "totalRevenue": 34469.07
+  },
+  {
+    "category": "Garden",
+    "productsCount": 32,
+    "averagePrice": 20,
+    "totalRevenue": 20005.90
+  },
+  {
+    "category": "Autoparts",
+    "productsCount": 29,
+    "averagePrice": 20,
+    "totalRevenue": 21523.98
+  },
+  {
+    "category": "Electronics",
+    "productsCount": 29,
+    "averagePrice": 20,
+    "totalRevenue": 16131.68
+  },
+  {
+    "category": "Sports",
+    "productsCount": 29,
+    "averagePrice": 20,
+    "totalRevenue": 26445.29
+  },
+  {
+    "category": "Drugs",
+    "productsCount": 26,
+    "averagePrice": 20,
+    "totalRevenue": 21725.80
+  },
+  {
+    "category": "For Children",
+    "productsCount": 26,
+    "averagePrice": 20,
+    "totalRevenue": 16807.23
+  },
+  {
+    "category": "Fashion",
+    "productsCount": 23,
+    "averagePrice": 20,
+    "totalRevenue": 17393.82
+  },
+  {
+    "category": "Other",
+    "productsCount": 23,
+    "averagePrice": 20,
+    "totalRevenue": 16744.00
+  },
+  {
+    "category": "Weapons",
+    "productsCount": 21,
+    "averagePrice": 20,
+    "totalRevenue": 16566.44
+  },
+  {
+    "category": "Business",
+    "productsCount": 19,
+    "averagePrice": 20,
+    "totalRevenue": 16468.49
+  }
+]

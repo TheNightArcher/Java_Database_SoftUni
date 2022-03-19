@@ -26,6 +26,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
     public static final String PRODUCT_IN_RANGE_FILE_NAME = "products-in-range.json";
     public static final String USER_AND_SOLD_PRODUCTS = "users-and-sold-products.json";
+    public static final String CATEGORIES_WITH_COUNT_OF_PRODUCTS = "categories-with-count-of-products.json";
 
     private final CategoryService categoryService;
     private final UserService userService;
@@ -56,11 +57,13 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
 
     }
 
-    private void categoriesByCount() {
+    private void categoriesByCount() throws IOException {
         List<CategoryProductsDto> categoryProductsDtos =
                 categoryService.findAllCategoriesWithProductCount();
 
+        String content = gson.toJson(categoryProductsDtos);
 
+        writeToFile(OUTPUT_PATH + CATEGORIES_WITH_COUNT_OF_PRODUCTS,content );
     }
 
     private void soldProducts() throws IOException {

@@ -81,7 +81,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryProductsDto> findAllCategoriesWithProductCount() {
-        return categoryRepository.findAllCategoriesProductsCount()
+        return categoryRepository.findAllCategoriesWithTheirCountOfProducts()
                 .stream()
                 .map(category -> {
                     CategoryProductsDto categoryProductsDto = modelMapper

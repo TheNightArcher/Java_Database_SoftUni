@@ -2,7 +2,6 @@ package bg.softuni.jsonexr.models;
 
 import javax.persistence.*;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,7 +15,7 @@ public class Category {
     @Column(length = 15, nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories",fetch = FetchType.EAGER)
     private Set<Product> products;
 
 

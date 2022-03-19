@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
+
     @Query("SELECT c FROM categories c " +
-            "JOIN c.products p " +
-            "ORDER BY p.size DESC")
-    List<Category> findAllCategoriesProductsCount();
+            "ORDER BY c.products.size DESC ")
+    List<Category> findAllCategoriesWithTheirCountOfProducts();
 }
