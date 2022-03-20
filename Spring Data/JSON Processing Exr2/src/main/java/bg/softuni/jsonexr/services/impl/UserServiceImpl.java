@@ -4,6 +4,7 @@ import bg.softuni.jsonexr.constants.GlobalConstants;
 import bg.softuni.jsonexr.models.User;
 import bg.softuni.jsonexr.models.dtos.UserSeedDto;
 import bg.softuni.jsonexr.models.dtos.UserSoldDto;
+import bg.softuni.jsonexr.models.dtos.UsersWithMoreThenOneSoledProductDto;
 import bg.softuni.jsonexr.repositories.UserRepository;
 import bg.softuni.jsonexr.services.UserService;
 import bg.softuni.jsonexr.utils.ValidationUtil;
@@ -67,6 +68,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAllUsersWithMoreThenOneSoldProductOrderByLastNameThenFirstName()
                 .stream()
                 .map(user -> modelMapper.map(user,UserSoldDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UsersWithMoreThenOneSoledProductDto> findAllUsersWithMoreThenOneSoledProduct() {
+        return userRepository.findAllUsersWithMoreThenOneSoledProducts()
+                .stream()
+                .map(user -> modelMapper.map(user,UsersWithMoreThenOneSoledProductDto.class))
                 .collect(Collectors.toList());
     }
 }

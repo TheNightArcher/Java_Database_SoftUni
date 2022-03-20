@@ -3,6 +3,7 @@ package bg.softuni.jsonexr;
 import bg.softuni.jsonexr.models.dtos.CategoryProductsDto;
 import bg.softuni.jsonexr.models.dtos.ProductNameAndPriceDto;
 import bg.softuni.jsonexr.models.dtos.UserSoldDto;
+import bg.softuni.jsonexr.models.dtos.UsersWithMoreThenOneSoledProductDto;
 import bg.softuni.jsonexr.services.CategoryService;
 import bg.softuni.jsonexr.services.ProductService;
 import bg.softuni.jsonexr.services.UserService;
@@ -27,6 +28,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     public static final String PRODUCT_IN_RANGE_FILE_NAME = "products-in-range.json";
     public static final String USER_AND_SOLD_PRODUCTS = "users-and-sold-products.json";
     public static final String CATEGORIES_WITH_COUNT_OF_PRODUCTS = "categories-with-count-of-products.json";
+    public static final String USERS_WITH_PRODUCTS = "users-with-products.json";
 
     private final CategoryService categoryService;
     private final UserService userService;
@@ -53,13 +55,23 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
             case 1 -> productsInRange();
             case 2 -> soldProducts();
             case 3 -> categoriesByCount();
+            case 4 -> usersProducts();
         }
 
     }
 
+    private void usersProducts() throws IOException {
+        List<UsersWithMoreThenOneSoledProductDto> allUsersWithMoreThenOneSoledProduct = userService
+                .findAllUsersWithMoreThenOneSoledProduct();
+
+        String content = gson.toJson(allUsersWithMoreThenOneSoledProduct);
+
+        writeToFile(OUTPUT_PATH + USERS_WITH_PRODUCTS,content);
+    }
+
     private void categoriesByCount() throws IOException {
-        List<CategoryProductsDto> categoryProductsDtos =
-                categoryService.findAllCategoriesWithProductCount();
+        List<CategoryProductsDto> categoryProductsDtos = categoryService
+                .findAllCategoriesWithProductCount();
 
         String content = gson.toJson(categoryProductsDtos);
 

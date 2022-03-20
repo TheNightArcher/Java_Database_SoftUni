@@ -14,4 +14,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "WHERE (SELECT COUNT (p) FROM products  p WHERE p.seller.id = u.id) > 0 " +
             "ORDER BY u.lastName,u.firstName")
     List<User> findAllUsersWithMoreThenOneSoldProductOrderByLastNameThenFirstName();
+
+
+    @Query("SELECT u FROM users u " +
+            "WHERE (SELECT COUNT (p) FROM  products p WHERE p.buyer.id = u.id) > 0 " +
+            "ORDER BY u.products.size DESC ,u.lastName ")
+    List<User> findAllUsersWithMoreThenOneSoledProducts();
 }
