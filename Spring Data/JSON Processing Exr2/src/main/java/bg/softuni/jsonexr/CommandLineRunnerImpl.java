@@ -57,6 +57,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
             case 3 -> categoriesByCount();
             case 4 -> usersProducts();
         }
+        
     }
 
     private void usersProducts() throws IOException {
