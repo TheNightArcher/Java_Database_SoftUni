@@ -1,5 +1,7 @@
 package com.example.football.config;
 
-//ToDo Create configurations
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class ApplicationBeanConfiguration {
 }

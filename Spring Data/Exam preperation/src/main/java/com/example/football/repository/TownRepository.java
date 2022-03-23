@@ -1,6 +1,8 @@
 package com.example.football.repository;
 
 
-//ToDo:
+import org.springframework.stereotype.Repository;
+
+@Repository
 public interface TownRepository   {
 }
