@@ -1,13 +1,14 @@
 package com.example.football.service;
 
 
-//ToDo - Implement all methods
+import java.io.IOException;
+
 public interface TownService {
 
     boolean areImported();
 
-    String readTownsFileContent() ;
+    String readTownsFileContent() throws IOException;
 	
-	String importTowns();
+	String importTowns() throws IOException;
 
 }
