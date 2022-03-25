@@ -1,5 +1,7 @@
 package com.example.football.service;
 
+import com.example.football.models.entity.Team;
+
 import java.io.IOException;
 
 public interface TeamService {
@@ -9,4 +11,5 @@ public interface TeamService {
 
     String importTeams() throws IOException;
 
+    Team getTeam(String name);
 }

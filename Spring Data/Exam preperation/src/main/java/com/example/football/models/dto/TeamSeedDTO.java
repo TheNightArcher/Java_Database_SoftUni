@@ -24,6 +24,9 @@ public class TeamSeedDTO {
     @Size(min = 10)
     private String history;
 
+    @Expose
+    private String townName;
+
     public TeamSeedDTO() {
     }
 
@@ -57,5 +60,13 @@ public class TeamSeedDTO {
 
     public void setHistory(String history) {
         this.history = history;
+    }
+
+    public String getTownName() {
+        return townName;
+    }
+
+    public void setTownName(String townName) {
+        this.townName = townName;
     }
 }

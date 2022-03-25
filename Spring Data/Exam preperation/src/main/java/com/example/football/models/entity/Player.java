@@ -38,6 +38,10 @@ public class Player {
     public Player() {
     }
 
+    public long getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }

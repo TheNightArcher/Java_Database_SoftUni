@@ -4,6 +4,7 @@ import com.example.football.models.dto.TeamSeedDTO;
 import com.example.football.models.entity.Team;
 import com.example.football.repository.TeamRepository;
 import com.example.football.service.TeamService;
+import com.example.football.service.TownService;
 import com.example.football.util.ValidationUtil;
 import com.google.gson.Gson;
 import org.modelmapper.ModelMapper;
@@ -21,13 +22,15 @@ public class TeamServiceImpl implements TeamService {
     public static final String TEAMS_FILE_PATH = "src/main/resources/files/json/teams.json";
 
     private final TeamRepository teamRepository;
+    private final TownService townService;
     private final ModelMapper modelMapper;
     private final Gson gson;
     private final ValidationUtil validationUtil;
 
     @Autowired
-    public TeamServiceImpl(TeamRepository teamRepository, ModelMapper modelMapper, Gson gson, ValidationUtil validationUtil) {
+    public TeamServiceImpl(TeamRepository teamRepository, TownService townService, ModelMapper modelMapper, Gson gson, ValidationUtil validationUtil) {
         this.teamRepository = teamRepository;
+        this.townService = townService;
         this.modelMapper = modelMapper;
         this.gson = gson;
         this.validationUtil = validationUtil;
@@ -60,9 +63,20 @@ public class TeamServiceImpl implements TeamService {
 
                     return isValid;
                 })
-                .map(teamSeedDTO -> modelMapper.map(teamSeedDTO, Team.class))
+                .map(teamSeedDTO -> {
+                    Team team = modelMapper.map(teamSeedDTO, Team.class);
+
+                    team.setTown(townService.getTown(teamSeedDTO.getTownName()));
+
+                    return team;
+                })
                 .forEach(teamRepository::save);
 
         return sb.toString();
+    }
+
+    @Override
+    public Team getTeam(String name) {
+        return teamRepository.findByName(name);
     }
 }
