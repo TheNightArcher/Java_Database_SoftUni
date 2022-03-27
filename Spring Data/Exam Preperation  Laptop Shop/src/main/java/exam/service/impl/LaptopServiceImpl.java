@@ -75,13 +75,15 @@ public class LaptopServiceImpl implements LaptopService {
         StringBuilder sb = new StringBuilder();
 
         laptopRepository.findTheBestLaptops()
-                .forEach(l -> sb.append(String.format("Laptop - %s\n" +
-                                        "*Cpu speed - %.2f\n" +
-                                        "**Ram - %d\n" +
-                                        "***Storage - %d\n" +
-                                        "****Price - %.2f\n" +
-                                        "#Shop name - %s\n" +
-                                        "##Town - %s\n",
+                .forEach(l -> sb.append(String.format("""
+                                        Laptop - %s
+                                        *Cpu speed - %.2f
+                                        **Ram - %d
+                                        ***Storage - %d
+                                        ****Price - %.2f
+                                        #Shop name - %s
+                                        ##Town - %s
+                                        """,
                                 l.getMacAddress(),
                                 l.getCpuSpeed(),
                                 l.getRam(),
