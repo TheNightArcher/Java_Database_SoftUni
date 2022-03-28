@@ -1,5 +1,7 @@
 package softuni.exam.instagraphlite.service;
 
+import softuni.exam.instagraphlite.models.entity.Picture;
+
 import java.io.IOException;
 
 public interface PictureService {
@@ -8,4 +10,5 @@ public interface PictureService {
     String importPictures() throws IOException;
     String exportPictures();
 
+    Picture getPicture(String profilePicture);
 }
