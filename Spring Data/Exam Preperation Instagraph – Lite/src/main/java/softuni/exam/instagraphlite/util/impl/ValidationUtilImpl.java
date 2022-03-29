@@ -9,12 +9,12 @@ import javax.validation.Validator;
 @Component
 public class ValidationUtilImpl implements ValidationUtil {
 
-    Validator validator = Validation
-            .buildDefaultValidatorFactory()
-            .getValidator();
-
     @Override
     public <E> boolean isValid(E entity) {
+        Validator validator = Validation
+                .buildDefaultValidatorFactory()
+                .getValidator();
+
         return validator.validate(entity).isEmpty();
     }
 }

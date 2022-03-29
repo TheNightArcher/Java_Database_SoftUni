@@ -1,6 +1,6 @@
 package softuni.exam.instagraphlite.service;
 
-import softuni.exam.instagraphlite.models.entity.Picture;
+import softuni.exam.instagraphlite.models.entities.Picture;
 
 import java.io.IOException;
 
@@ -10,5 +10,7 @@ public interface PictureService {
     String importPictures() throws IOException;
     String exportPictures();
 
-    Picture getPicture(String profilePicture);
+    Picture getPath(String profilePicture);
+
+    boolean isExistPath(String profilePicture);
 }

@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import softuni.exam.instagraphlite.models.dtos.UserSeedDTO;
-import softuni.exam.instagraphlite.models.entity.User;
+import softuni.exam.instagraphlite.models.dtos.json.UserSeedDTO;
+import softuni.exam.instagraphlite.models.entities.User;
 import softuni.exam.instagraphlite.repository.UserRepository;
 import softuni.exam.instagraphlite.service.PictureService;
 import softuni.exam.instagraphlite.service.UserService;
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Comparator;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,7 +23,6 @@ public class UserServiceImpl implements UserService {
     private static final String USERS_FILE_PATH = "src/main/resources/files/users.json";
 
     private final UserRepository userRepository;
-
     private final PictureService pictureService;
     private final ModelMapper modelMapper;
     private final ValidationUtil validationUtil;
@@ -44,7 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String readFromFileContent() throws IOException {
-        return Files.readString(Path.of(USERS_FILE_PATH));
+        return Files
+                .readString(Path.of(USERS_FILE_PATH));
     }
 
     @Override
@@ -53,15 +54,22 @@ public class UserServiceImpl implements UserService {
 
         Arrays.stream(gson.fromJson(readFromFileContent(), UserSeedDTO[].class))
                 .filter(userSeedDTO -> {
-                    boolean isValid = validationUtil.isValid(userSeedDTO);
+                    boolean isValid = validationUtil.isValid(userSeedDTO)
+                            && !isUsernameExist(userSeedDTO.getUsername())
+                            && pictureService.isExistPath(userSeedDTO.getProfilePicture());
 
-                    return isValid(sb, userSeedDTO, isValid);
+                    sb.append(isValid ? String.format("Successfully imported User: %s",
+                                    userSeedDTO.getUsername())
+
+                                    : "Invalid User")
+                            .append(System.lineSeparator());
+
+                    return isValid;
                 })
                 .map(userSeedDTO -> {
-
                     User user = modelMapper.map(userSeedDTO, User.class);
 
-                    user.setProfilePicture(pictureService.getPicture(userSeedDTO.getProfilePicture()));
+                    user.setProfilePicture(pictureService.getPath(userSeedDTO.getProfilePicture()));
 
                     return user;
                 })
@@ -72,7 +80,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String exportUsersWithTheirPosts() {
-     return null;
+        StringBuilder sb = new StringBuilder();
+
+        userRepository.exportUserWithPosts()
+                .forEach(u -> {
+
+                    sb.append(String.format("User: %s%n" +
+                                    "Post count: %d%n",
+                            u.getUsername(),
+                            u.getPosts().size()));
+
+                    u.getPosts()
+                            .stream()
+                            .sorted(Comparator.comparingDouble(p -> p.getPicture().getSize()))
+                            .forEach(p -> sb.append(String.format("==Post Details:%n" +
+                                            "----Caption: %s%n" +
+                                            "----Picture Size: %.2f%n", p.getCaption()
+                                    , p.getPicture().getSize())));
+                });
+
+
+        return sb.toString().trim();
+    }
+
+    private boolean isUsernameExist(String username) {
+        return userRepository.existsByUsername(username);
     }
 
     @Override
@@ -80,36 +112,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
-    private boolean isValid(StringBuilder sb, UserSeedDTO userSeedDTO, boolean isValid) {
-        if (userSeedDTO.getUsername() == null) {
-            sb.append("Invalid User")
-                    .append(System.lineSeparator());
-            return false;
-
-        } else if (userSeedDTO.getPassword() == null) {
-            sb.append("Invalid User")
-                    .append(System.lineSeparator());
-            return false;
-
-        } else if (userRepository.findByUsername(userSeedDTO.getUsername()) != null) {
-
-            sb.append("Invalid User")
-                    .append(System.lineSeparator());
-            return false;
-
-        } else if (pictureService.getPicture(userSeedDTO.getProfilePicture()) == null) {
-            sb.append("Invalid User")
-                    .append(System.lineSeparator());
-            return false;
-
-        } else {
-            sb.append(isValid ? String.format("Successfully imported User: %s",
-                            userSeedDTO.getUsername())
-
-                            : "Invalid User")
-                    .append(System.lineSeparator());
-
-            return isValid;
-        }
+    @Override
+    public boolean isExistUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

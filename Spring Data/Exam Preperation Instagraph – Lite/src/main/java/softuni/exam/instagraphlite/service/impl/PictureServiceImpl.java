@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import softuni.exam.instagraphlite.models.dtos.PictureSeedDTO;
-import softuni.exam.instagraphlite.models.entity.Picture;
+import softuni.exam.instagraphlite.models.dtos.json.PictureSeedDTO;
+import softuni.exam.instagraphlite.models.entities.Picture;
 import softuni.exam.instagraphlite.repository.PictureRepository;
 import softuni.exam.instagraphlite.service.PictureService;
 import softuni.exam.instagraphlite.util.ValidationUtil;
@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 @Service
 public class PictureServiceImpl implements PictureService {
+
     private static final String PICTURES_FILE_PATH = "src/main/resources/files/pictures.json";
 
     private final PictureRepository pictureRepository;
@@ -31,6 +32,7 @@ public class PictureServiceImpl implements PictureService {
         this.validationUtil = validationUtil;
         this.gson = gson;
     }
+
 
     @Override
     public boolean areImported() {
@@ -48,42 +50,41 @@ public class PictureServiceImpl implements PictureService {
 
         Arrays.stream(gson.fromJson(readFromFileContent(), PictureSeedDTO[].class))
                 .filter(pictureSeedDTO -> {
-                    boolean isValid = validationUtil.isValid(pictureSeedDTO);
+                    boolean isValid = validationUtil.isValid(pictureSeedDTO)
+                            && !isExistPath(pictureSeedDTO.getPath());
 
-                    if (pictureSeedDTO.getPath() == null) {
-                        sb.append("Invalid Picture")
-                                .append(System.lineSeparator());
-                        return false;
+                    sb.append(isValid ? String.format("Successfully imported Picture, with size %.2f",
+                                    pictureSeedDTO.getSize())
 
-                    } else if (pictureRepository.findByPath(pictureSeedDTO.getPath()) != null) {
-                        sb.append("Invalid Picture")
-                                .append(System.lineSeparator());
-                        return false;
+                                    : "Invalid Picture")
+                            .append(System.lineSeparator());
 
-                    } else {
-                        sb.append(isValid ? String.format("Successfully imported Picture, with size %.2f",
-                                        pictureSeedDTO.getSize())
-
-                                        : "Invalid Picture")
-                                .append(System.lineSeparator());
-
-                        return isValid;
-
-                    }
+                    return isValid;
                 })
                 .map(pictureSeedDTO -> modelMapper.map(pictureSeedDTO, Picture.class))
                 .forEach(pictureRepository::save);
 
-        return sb.toString().trim();
+        return sb.toString();
     }
 
     @Override
     public String exportPictures() {
-        return null;
+        StringBuilder sb = new StringBuilder();
+
+        pictureRepository.findAllByGreaterThanOrderBySizeAsc(30000)
+                .forEach(p -> sb.append(String.format("%.2f - %s",
+                        p.getSize(),
+                        p.getPath()))
+                        .append(System.lineSeparator()));
+        return sb.toString().trim();
+    }
+
+    public boolean isExistPath(String path) {
+        return pictureRepository.existsByPath(path);
     }
 
     @Override
-    public Picture getPicture(String profilePicture) {
+    public Picture getPath(String profilePicture) {
         return pictureRepository.findByPath(profilePicture);
     }
 }

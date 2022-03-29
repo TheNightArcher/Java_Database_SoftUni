@@ -1,4 +1,4 @@
-package softuni.exam.instagraphlite.models.dtos;
+package softuni.exam.instagraphlite.models.dtos.xml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -11,12 +11,13 @@ import java.util.List;
 public class PostSeedRootDTO {
 
     @XmlElement(name = "post")
-    private List<PostSeedDTO> posts;
-
-    public PostSeedRootDTO() {
-    }
+   private List<PostSeedDTO> posts;
 
     public List<PostSeedDTO> getPosts() {
         return posts;
+    }
+
+    public void setPosts(List<PostSeedDTO> posts) {
+        this.posts = posts;
     }
 }

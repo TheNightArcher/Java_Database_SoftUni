@@ -1,28 +1,20 @@
-package softuni.exam.instagraphlite.models.entity;
+package softuni.exam.instagraphlite.models.entities;
 
 import javax.persistence.*;
 
 @Entity(name = "posts")
-public class Post {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Post extends BaseEntity{
 
     @Column(nullable = false)
     private String caption;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private User user;
 
-    @OneToOne
+    @ManyToOne(optional = false)
     private Picture picture;
 
     public Post() {
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getCaption() {

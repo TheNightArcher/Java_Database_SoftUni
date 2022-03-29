@@ -8,7 +8,4 @@ public interface PostService {
     String readFromFileContent() throws IOException;
     String importPosts() throws IOException, JAXBException;
 
-    int getCountOfPostByUser(int id);
-
-    String getCaption(int id);
 }

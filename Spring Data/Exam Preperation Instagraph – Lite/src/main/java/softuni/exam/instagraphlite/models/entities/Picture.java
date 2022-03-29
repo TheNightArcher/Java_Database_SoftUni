@@ -1,25 +1,21 @@
-package softuni.exam.instagraphlite.models.entity;
+package softuni.exam.instagraphlite.models.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "pictures")
-public class Picture {
+public class Picture extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String path;
 
     @Column(nullable = false)
     private double size;
 
-    public Picture() {
-    }
+    @OneToMany(mappedBy = "profilePicture")
+    private Set<User> users;
 
-    public int getId() {
-        return id;
+    public Picture() {
     }
 
     public String getPath() {

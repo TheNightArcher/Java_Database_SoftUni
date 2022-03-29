@@ -1,6 +1,6 @@
 package softuni.exam.instagraphlite.service;
 
-import softuni.exam.instagraphlite.models.entity.User;
+import softuni.exam.instagraphlite.models.entities.User;
 
 import java.io.IOException;
 
@@ -11,4 +11,6 @@ public interface UserService {
     String exportUsersWithTheirPosts();
 
     User getUser(String username);
+
+    boolean isExistUsername(String username);
 }

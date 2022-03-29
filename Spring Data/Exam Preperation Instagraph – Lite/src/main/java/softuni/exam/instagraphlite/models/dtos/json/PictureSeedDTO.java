@@ -1,18 +1,20 @@
-package softuni.exam.instagraphlite.models.dtos;
+package softuni.exam.instagraphlite.models.dtos.json;
 
 import com.google.gson.annotations.Expose;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public class PictureSeedDTO {
 
     @Expose
+    @NotNull
     private String path;
 
     @Expose
-    @Min(500)
-    @Max(60000)
+    @Min(value = 500)
+    @Max(value = 60000)
     private double size;
 
     public PictureSeedDTO() {
