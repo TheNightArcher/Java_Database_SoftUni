@@ -20,10 +20,10 @@ public class Ticket {
     @Column(name = "take_off",nullable = false)
     private LocalDateTime takeoff;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Plane plane;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Passenger passenger;
 
     @ManyToOne(optional = false)

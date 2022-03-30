@@ -79,7 +79,21 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public String getPassengersOrderByTicketsCountDescendingThenByEmail() {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        passengerRepository.findAllByPassengerOrderByCount()
+                .forEach(p -> sb.append(String.format("Passenger %s  %s\n" +
+                                        "\tEmail - %s\n" +
+                                        "\tPhone - %s\n" +
+                                        "\tNumber of tickets - %d\n",
+                                p.getFirstName(),
+                                p.getLastName(),
+                                p.getEmail(),
+                                p.getPhoneNumber(),
+                                p.getTickets().size()
+                        ))
+                        .append(System.lineSeparator()));
+
+        return sb.toString();
     }
 
     @Override

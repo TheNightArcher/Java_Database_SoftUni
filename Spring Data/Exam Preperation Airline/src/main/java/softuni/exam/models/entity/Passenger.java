@@ -1,6 +1,7 @@
 package softuni.exam.models.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity(name = "passengers")
 public class Passenger {
@@ -27,7 +28,18 @@ public class Passenger {
     @ManyToOne(optional = false)
     private Town town;
 
+    @OneToMany(mappedBy = "passenger",fetch = FetchType.EAGER)
+    private Set<Ticket> tickets;
+
     public Passenger() {
+    }
+
+    public Set<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(Set<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
     public long getId() {

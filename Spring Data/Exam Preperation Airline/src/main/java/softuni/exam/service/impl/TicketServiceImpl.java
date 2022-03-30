@@ -62,10 +62,8 @@ public class TicketServiceImpl implements TicketService {
                 .getTickets()
                 .stream()
                 .filter(ticketSeedDTO -> {
-
-                    // Here I validate if the entity exist
                     boolean isValid = validationUtil.isValid(ticketSeedDTO)
-                            && !isExistSerialNumber(ticketSeedDTO.getSerialNumber());
+                            && !isSerialNumberExist(ticketSeedDTO.getSerialNumber());
 
                     sb.append(isValid ? String.format("Successfully imported Ticket %s - %s",
                                     ticketSeedDTO.getFromTown().getName(),
@@ -91,7 +89,7 @@ public class TicketServiceImpl implements TicketService {
         return sb.toString().trim();
     }
 
-    private boolean isExistSerialNumber(String serialNumber) {
+    private boolean isSerialNumberExist(String serialNumber) {
         return ticketRepository.existsBySerialNumber(serialNumber);
     }
 }
