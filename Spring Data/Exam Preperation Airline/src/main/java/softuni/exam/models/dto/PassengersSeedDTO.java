@@ -1,37 +1,43 @@
-package softuni.exam.models.entity;
+package softuni.exam.models.dto;
 
-import javax.persistence.*;
+import com.google.gson.annotations.Expose;
 
-@Entity(name = "passengers")
-public class Passenger {
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class PassengersSeedDTO {
 
-    @Column(name = "first_name", nullable = false)
+    @Expose
+    @NotNull
+    @Size(min = 2)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Expose
+    @NotNull
+    @Size(min = 2)
     private String lastName;
 
-    @Column(nullable = false)
+    @Expose
+    @Positive
+    @NotNull
     private int age;
 
-    @Column(name = "phone_number", nullable = false)
+    @Expose
+    @NotNull
     private String phoneNumber;
 
-    @Column(unique = true, nullable = false)
+    @Expose
+    @Email
+    @NotNull
     private String email;
 
-    @ManyToOne(optional = false)
-    private Town town;
+    @Expose
+    @NotNull
+    private String town;
 
-    public Passenger() {
-    }
-
-    public long getId() {
-        return id;
+    public PassengersSeedDTO() {
     }
 
     public String getFirstName() {
@@ -74,11 +80,11 @@ public class Passenger {
         this.email = email;
     }
 
-    public Town getTown() {
+    public String getTown() {
         return town;
     }
 
-    public void setTown(Town town) {
+    public void setTown(String town) {
         this.town = town;
     }
 }
