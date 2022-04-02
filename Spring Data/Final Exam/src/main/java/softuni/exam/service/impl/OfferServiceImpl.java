@@ -62,8 +62,7 @@ public class OfferServiceImpl implements OfferService {
                 .filter(offerSeedDTO -> {
                     boolean isValid = validationUtil.isValid(offerSeedDTO)
                             && isExistsAgent(offerSeedDTO.getAgent().getName())
-                            && isExistsApartment(offerSeedDTO.getApartment().getId())
-                            && !isExistsAgentName(agentService.findAgent(offerSeedDTO.getAgent().getName()));
+                            && isExistsApartment(offerSeedDTO.getApartment().getId());
 
                     sb.append(isValid ? String.format("Successfully imported offer %.2f",
                                     offerSeedDTO.getPrice())
