@@ -20,7 +20,8 @@ public class ValidatorUtilImpl implements ValidatorUtil {
 
     @Override
     public <E> boolean isValid(E entity) {
-        //TODO Implement me
+
+        return validator.validate(entity).isEmpty();
         throw  new NotYetImplementedException("Not implemented");
     }
 
